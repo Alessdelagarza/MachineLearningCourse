@@ -1,0 +1,49 @@
+import codecademylib3_seaborn
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn import linear_model
+
+df = pd.read_csv("https://content.codecademy.com/programs/data-science-path/linear_regression/honeyproduction.csv")
+
+#Show Data Structure from CSV file
+#print(df.head())
+
+#Get mean of total year production
+prod_per_year = df.groupby('year').totalprod.mean().reset_index()
+#print(prod_per_year)
+
+#Forming a Column for the years for the prod/yr values
+X = prod_per_year["year"]
+X = X.values.reshape(-1,1)
+#print(X)
+
+#Forming a Column of the prod/yr values
+y = prod_per_year["totalprod"]
+
+#Scatter Plot for yers and production
+plt.scatter(X,y)
+plt.show()
+
+#Create the Linear Regression Model
+regr = linear_model.LinearRegression()
+regr.fit(X,y)
+#print(regr.coef_) #slope of line
+#print(regr.intercept_) #y-intercept
+
+#Predictions of y using Linear Regression model on X inputs
+y_predict = regr.predict(X)
+#print(y_predict)
+
+#Plot predicted regression line
+plt.plot(X, y_predict)
+plt.show()
+
+#Predicting yield in the year 2050
+nums = np.array(range(2013,2050))
+X_future = nums.reshape(-1,1)
+
+future_predict = regr.predict(X_future)
+
+plt.plot(X_future,future_predict)
+plt.show()
